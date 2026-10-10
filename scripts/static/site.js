@@ -14,21 +14,17 @@
     syncT();
   });
   mq.addEventListener?.('change', syncT); syncT();
-  /* global EN <-> 中 toggle (mirrors x-digest's remembered 中文 switch): swaps English content for the pre-written Chinese */
-  const zBtn = document.querySelector('[data-toggle-zh]');
-  const syncZ = () => zBtn?.setAttribute('aria-checked', String(root.classList.contains('show-zh')));
-  zBtn?.addEventListener('click', () => {
-    root.classList.toggle('show-zh'); store.set('igt.zh', root.classList.contains('show-zh') ? '1' : null); syncZ();
-    document.dispatchEvent(new Event('igt:zh'));
+  /* Chinese glosses: one toggle, remembered. Copied from theodoruszq/x-digest src/digest.js (key renamed xdigest.zh -> igt.zh) */
+  const zhBtn = document.querySelector('[data-toggle-zh]');
+  const syncZh = () => {
+    zhBtn?.setAttribute('aria-checked', String(root.classList.contains('show-zh')));
+  };
+  zhBtn?.addEventListener('click', () => {
+    root.classList.toggle('show-zh');
+    store.set('igt.zh', root.classList.contains('show-zh') ? '1' : null);
+    syncZh();
   });
-  syncZ();
-  /* glossary popovers: hover/focus via CSS; tap toggles .open so it also works on touch */
-  document.addEventListener('click', (e) => {
-    const g = e.target.closest('.gl');
-    document.querySelectorAll('.gl.open').forEach((x) => { if (x !== g) x.classList.remove('open'); });
-    if (g) { g.classList.toggle('open'); const r = g.getBoundingClientRect(); g.classList.toggle('flip', r.left + 220 > innerWidth); }
-  });
-  document.addEventListener('mouseover', (e) => { const g = e.target.closest?.('.gl'); if (g) g.classList.toggle('flip', g.getBoundingClientRect().left + 220 > innerWidth); });
+  syncZh();
 
   const copyText = (text, btn) => {
     const done = () => { const o = btn.textContent; btn.textContent = '已复制'; setTimeout(() => (btn.textContent = o), 1400); };
@@ -54,7 +50,14 @@
     if (it.s) { p.append(dot()); const a = el('a', 'orig'); a.href = it.s; a.rel = 'noopener'; a.innerHTML = '原帖' + EXT; p.append(a); }
     return p;
   };
-  /* render text with glossary terms (first occurrence) + optional Chinese version shown under html.show-zh */
+  /* inline glosses, same markup as x-digest render_inline: <span class="g">term</span><span class="g-zh zh-only" lang="zh-Hans"><i>pos.</i> 中文</span> */
+  const POS_RE = /^((?:[a-z]{1,5}\.)(?:\s*\/\s*[a-z]{1,5}\.)*|idiom|phrase|phr\.)\s+(.+)$/;
+  const glossEl = (term, gloss) => {
+    const f = document.createDocumentFragment(); f.append(el('span', 'g', term));
+    const z = el('span', 'g-zh zh-only'); z.lang = 'zh-Hans'; const m = gloss.trim().match(POS_RE);
+    if (m) { z.append(el('i', '', m[1]), ' ' + m[2].trim()); } else z.append(gloss.trim());
+    f.append(z); return f;
+  };
   const glossify = (parent, text, gl, used) => {
     const terms = (gl || []).filter(([t]) => !used.has(t.toLowerCase())).sort((a, b) => b[0].length - a[0].length);
     if (!terms.length) { parent.append(text); return; }
@@ -64,17 +67,11 @@
     while ((m = re.exec(text))) {
       const k = m[1].toLowerCase(); if (used.has(k)) continue;
       const g = terms.find(([t]) => t.toLowerCase() === k); if (!g) continue;
-      used.add(k); parent.append(text.slice(last, m.index));
-      const sp = el('span', 'gl', m[1]); sp.tabIndex = 0; sp.dataset.gl = g[1]; parent.append(sp); last = m.index + m[1].length;
+      used.add(k); parent.append(text.slice(last, m.index), glossEl(m[1], g[1])); last = m.index + m[1].length;
     }
     parent.append(text.slice(last));
   };
-  const fillText = (node, en, zh, gl) => {
-    const used = cur && cur.__used ? cur.__used : new Set();
-    if (cur) cur.__used = used;
-    const a = el('span', zh ? 'en-only' : ''); glossify(a, en, gl || (cur && cur.g), used); node.append(a);
-    if (zh) { const b = el('span', 'zh-only', zh); b.lang = 'zh-CN'; node.append(b); }
-  };
+  const fillText = (node, text) => { if (!cur.__used) cur.__used = new Set(); glossify(node, text, cur.g, cur.__used); };
   const promptBox = (it, clamp) => {
     const box = el('div', 'prompt');
     if (!it.p) { box.append(el('span', 'prompt-none', '提示词：不详')); return box; }
@@ -82,8 +79,7 @@
     const acts = el('span', 'acts');
     if (clamp) { const ex = el('button', '', '展开'); ex.type = 'button'; ex.dataset.expand = ''; ex.setAttribute('aria-expanded', 'false'); acts.append(ex); }
     const cp = el('button', '', '复制'); cp.type = 'button'; cp.addEventListener('click', () => copyText(it.p, cp)); acts.append(cp);
-    head.append(acts); const pre = el('pre', 'prompt-text'); fillText(pre, it.p, it.pz, it.g); box.append(head, pre);
-    if (it.pz) box.append(el('p', 'src-note zh-only', '以上为中文翻译，“复制”始终复制英文原文提示词。'));
+    head.append(acts); const pre = el('pre', 'prompt-text'); fillText(pre, it.p); box.append(head, pre);
     return box;
   };
   const card = (it) => {
@@ -145,10 +141,10 @@
   };
   const render = () => {
     lbInfo.textContent = ''; if (cur) cur.__used = new Set();
-    const h = el('h2', 'item-title', cur.t || cur.u); lbInfo.append(h, meta(cur));
+    const h = el('h2', 'item-title'); fillText(h, cur.t || cur.u); lbInfo.append(h, meta(cur));
     const dl = el('dl', 'facts'); [['模型', cur.m], ['厂商', cur.mk], ['作者', cur.a ? '@' + cur.a : '不详'], ['日期', cur.d]].forEach(([k, v]) => { dl.append(el('dt', '', k), el('dd', '', v || '不详')); });
     lbInfo.append(dl, promptBox(cur, false));
-    if (cur.x) { lbInfo.append(el('h3', 'lb-h', '原帖文字')); const q = el('blockquote', 'post-text'); fillText(q, cur.x, cur.xz); lbInfo.append(q); }
+    if (cur.x) { lbInfo.append(el('h3', 'lb-h', '原帖文字')); const q = el('blockquote', 'post-text'); fillText(q, cur.x); lbInfo.append(q); }
     if (cur.ps) lbInfo.append(el('p', 'entry-meta src-note', '提示词来源：' + cur.ps));
     const links = el('p', 'lb-links');
     if (cur.s) { const a = el('a', 'orig'); a.href = cur.s; a.rel = 'noopener'; a.innerHTML = '打开原帖' + EXT; links.append(a); }

@@ -8,6 +8,7 @@
   color-scheme: light;
   --bg: #fff; --text: #171717; --body: #2e2e2e; --muted: #737373; --faint: #a3a3a3;
   --link: #1772d0; --subtle-link: #557a9e; --hover: #f09228;
+  --switch-off: #d4d4d8; --cjk: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
   --rule: #ececec; --quote-rule: #ddd; --zh: #8a5a1c; --zh-bg: #fbf6ee; --zh-line: #f0d9b5; --img-bg: #f1f1f2; --tab-bg: #f4f4f5;
   --sans: Lato, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Noto Sans SC', 'Microsoft YaHei', Verdana, Helvetica, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Noto Sans Mono CJK SC', monospace;
@@ -16,14 +17,14 @@
   color-scheme: dark;
   --bg: #141414; --text: #ececec; --body: #d4d4d4; --muted: #9a9a9a; --faint: #666;
   --link: #6eaaf0; --subtle-link: #8fb0d0; --hover: #f5a54a;
-  --rule: #262626; --quote-rule: #3a3a3a; --zh: #e0b878; --zh-bg: #1f1b15; --zh-line: #4a3b25; --img-bg: #1f1f1f; --tab-bg: #1f1f1f;
+  --switch-off: #48484c; --rule: #262626; --quote-rule: #3a3a3a; --zh: #e0b878; --zh-bg: #1f1b15; --zh-line: #4a3b25; --img-bg: #1f1f1f; --tab-bg: #1f1f1f;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #141414; --text: #ececec; --body: #d4d4d4; --muted: #9a9a9a; --faint: #666;
     --link: #6eaaf0; --subtle-link: #8fb0d0; --hover: #f5a54a;
-    --rule: #262626; --quote-rule: #3a3a3a; --zh: #e0b878; --zh-bg: #1f1b15; --zh-line: #4a3b25; --img-bg: #1f1f1f; --tab-bg: #1f1f1f;
+    --switch-off: #48484c; --rule: #262626; --quote-rule: #3a3a3a; --zh: #e0b878; --zh-bg: #1f1b15; --zh-line: #4a3b25; --img-bg: #1f1f1f; --tab-bg: #1f1f1f;
   }
 }
 * { box-sizing: border-box; }
@@ -144,32 +145,39 @@ mark { background: var(--hl-bg); color: var(--text); padding: 0 2px; border-radi
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --hl-bg: rgba(245, 165, 74, .22); } }
 .news-item[lang="en"] .points { font-family: var(--sans); }
 
-/* EN <-> 中 global toggle (html.show-zh, remembered like x-digest's 中文 switch) */
+/* ---- copied from theodoruszq/x-digest src/style.css: .zh-switch toggle + Chinese glosses (html.show-zh) ---- */
+:lang(zh-Hans) { font-family: var(--cjk); }
+.zh-switch {
+  appearance: none; display: none; align-items: center; gap: 7px; padding: 4px 0; min-height: 32px; margin: 0;
+  border: 0; background: none; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.js .zh-switch { display: inline-flex; }
+.zh-switch-label { font-family: var(--cjk); line-height: 1; transition: color .2s; }
+.zh-switch-track {
+  position: relative; flex: none; width: 34px; height: 20px; border-radius: 999px;
+  background: var(--switch-off); transition: background-color .22s ease;
+}
+.zh-switch-knob {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 1px 1px rgba(0, 0, 0, .08);
+  transition: transform .22s cubic-bezier(.3, .7, .4, 1);
+}
+.zh-switch:hover .zh-switch-label { color: var(--text); }
+.zh-switch:focus-visible { outline: none; }
+.zh-switch:focus-visible .zh-switch-track { outline: 2px solid var(--link); outline-offset: 2px; }
+.show-zh .zh-switch-track, .zh-switch[aria-checked="true"] .zh-switch-track { background: var(--link); }
+.show-zh .zh-switch-knob, .zh-switch[aria-checked="true"] .zh-switch-knob { transform: translateX(14px); }
+.show-zh .zh-switch-label { color: var(--text); }
 .zh-only { display: none; }
-.show-zh .zh-only { display: revert; }
-.show-zh .en-only { display: none; }
-span.zh-only, .show-zh span.zh-only { white-space: inherit; }
-.show-zh span.zh-only { display: inline; }
-.tr-toggle { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); appearance: none; border: 1px solid var(--rule); background: var(--bg);
-  color: var(--muted); height: 28px; padding: 0 9px; border-radius: 999px; font: inherit; font-size: 12px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
-.tr-toggle:hover { color: var(--text); }
-.tr-toggle .tr-arrow { color: var(--faint); }
-.tr-en { font-weight: 700; color: var(--text); }
-.show-zh .tr-en { font-weight: 400; color: inherit; }
-.show-zh .tr-zh { font-weight: 700; color: var(--link); }
-.show-zh .tr-toggle { border-color: var(--link); }
-
-/* glossary terms: dotted underline + popover on hover / focus / tap */
-.gl { position: relative; border-bottom: 1px dotted var(--zh); cursor: help; outline: none; }
-.gl::after { content: attr(data-gl); position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 20; width: max-content; max-width: 220px;
-  padding: 4px 9px; border-radius: 6px; background: var(--zh-bg); color: var(--zh); border: 1px solid var(--zh-line); box-shadow: 0 2px 8px rgba(0,0,0,.12);
-  font-family: var(--sans); font-size: 12px; font-weight: 400; line-height: 1.5; white-space: normal; text-align: left;
-  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .12s; }
-.gl.flip::after { left: auto; right: 0; }
-.gl:hover::after, .gl:focus::after, .gl.open::after { opacity: 1; visibility: visible; }
-.gl:focus-visible { background: var(--zh-bg); }
-.show-zh .gl { border-bottom-color: transparent; }
+.show-zh .g { text-decoration: underline; text-decoration-color: var(--zh-line); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.show-zh .g-zh { display: inline; margin: 0 1px 0 4px; padding: 0 5px; border-radius: 3px; background: var(--zh-bg);
+  color: var(--zh); font-size: 12px; font-weight: 400; line-height: 1.6; white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.show-zh .g-zh i { font-family: var(--sans); font-style: italic; opacity: .75; margin-right: 1px; }
+/* adaptations for this site: placement in the top bar; glosses inside <pre> prompts and bold facts */
+.topbar .zh-switch { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); }
+.prompt-text .g-zh { font-family: var(--cjk); }
+.hl .g-zh, .item-title .g-zh { font-weight: 400; }
+@media (max-width: 560px) { .topbar .zh-switch { right: 44px; } .topbar .zh-switch .zh-switch-label { display: none; } }
 .lb-h { font-size: 12px; font-weight: 400; color: var(--muted); margin: 16px 0 4px; }
 .post-text { margin: 0; padding: 0 0 0 12px; border-left: 2px solid var(--quote-rule); color: var(--body); font-size: 13px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
-.prompt-text .gl::after { white-space: normal; }
-@media (max-width: 560px) { .tr-toggle { right: 44px; padding: 0 7px; } .topbar { padding-right: 96px; padding-left: 96px; justify-content: center; } }

@@ -75,7 +75,7 @@ def page(title, body, ver, desc):
       <a class="tab on" role="tab" href="#news" data-tab="news" aria-selected="true" aria-controls="panel-news">News</a>
       <a class="tab" role="tab" href="#demos" data-tab="demos" aria-selected="false" aria-controls="panel-demos">Demos</a>
     </nav>
-    <button type="button" class="tr-toggle" data-toggle-zh role="switch" aria-checked="false" aria-label="英文内容切换为中文翻译" title="EN ↔ 中：英文内容切换为中文翻译"><span class="tr-en">EN</span><span class="tr-arrow" aria-hidden="true">↔</span><span class="tr-zh">中</span></button>
+    <button type="button" class="zh-switch" role="switch" aria-checked="false" data-toggle-zh aria-label="Chinese glosses" title="Chinese glosses"><span class="zh-switch-label" lang="zh-Hans" aria-hidden="true">中文</span><span class="zh-switch-track" aria-hidden="true"><span class="zh-switch-knob"></span></span></button>
     <button type="button" class="theme-btn" data-toggle-theme aria-label="切换深色/浅色" title="切换深色/浅色"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg></button>
   </header>
   <main id="main">
@@ -93,22 +93,36 @@ def rich(text):
     t = re.sub(r"==(.+?)==", r"<mark>\1</mark>", t)
     return t.replace("未经官方确认", '<span class="unconf">未经官方确认</span>')
 
+# Copied from theodoruszq/x-digest build.py (POS_RE, split_gloss, the span markup of render_inline):
+POS_RE = re.compile(r"^((?:[a-z]{1,5}\.)(?:\s*/\s*[a-z]{1,5}\.)*|idiom|phrase|phr\.)\s+(.+)$")
+
+def split_gloss(g):
+    m = POS_RE.match(g.strip())
+    return (m.group(1), m.group(2).strip()) if m else ("", g.strip())
+
+def gloss_html(term_html, gloss):
+    pos, zh = split_gloss(gloss)
+    pos_html = f'<i>{E(pos)}</i> ' if pos else ""
+    return (f'<span class="g">{term_html}</span>'
+            f'<span class="g-zh zh-only" lang="zh-Hans">{pos_html}{E(zh)}</span>')
+
 def annotate(h, glossary, used):
-    """Wrap the first occurrence (per item; `used` is shared across fields) of each glossary term in
-    already-rendered HTML. Only text outside tags is touched; case-insensitive, word boundaries."""
+    """x-digest-style inline glosses from the item's `glossary` (instead of inline [[term|gloss]] markup):
+    wrap the first occurrence per item (`used` is shared across fields) of each term in already-rendered HTML.
+    Only text outside tags is touched; case-insensitive, word boundaries, longest terms first."""
     terms = sorted((g for g in glossary or [] if g.get("term") and g.get("gloss")), key=lambda g: -len(g["term"]))
     if not terms: return h
     parts = re.split(r"(<[^>]+>)", h)
     for i, seg in enumerate(parts):
         if not seg or seg.startswith("<"): continue
-        hits = []  # (start, end, gloss) non-overlapping, longest terms first
+        hits = []
         for g in terms:
             if g["term"].lower() in used: continue
             for m in re.finditer(r"(?<![\w-])" + re.escape(E(g["term"])) + r"(?![\w-])", seg, re.I):
                 if all(m.end() <= x0 or m.start() >= x1 for x0, x1, _ in hits):
                     hits.append((m.start(), m.end(), g["gloss"])); used.add(g["term"].lower()); break
         for x0, x1, gloss in sorted(hits, reverse=True):
-            seg = seg[:x0] + f'<span class="gl" tabindex="0" data-gl="{E(gloss)}">{seg[x0:x1]}</span>' + seg[x1:]
+            seg = seg[:x0] + gloss_html(seg[x0:x1], gloss) + seg[x1:]
         parts[i] = seg
     return "".join(parts)
 
@@ -151,7 +165,7 @@ def main():
         rec = {"u": d["uid"], "d": d.get("date"), "t": d.get("title"), "m": d.get("model"), "mk": d.get("maker"),
                "a": d.get("author"), "s": d.get("source_url"), "p": d.get("prompt"), "ps": d.get("prompt_source"),
                "partial": (d.get("prompt_status") or "").startswith("partial") or None, "k": model_keys(d), "i": imgs,
-               "x": d.get("text"), "xz": d.get("text_zh"), "pz": d.get("prompt_zh"), "g": [[g["term"], g["gloss"]] for g in d.get("glossary") or []]}
+               "x": d.get("text"), "g": [[g["term"], g["gloss"]] for g in d.get("glossary") or []]}
         out.append({k: v for k, v in rec.items() if v not in (None, "", [])})
     cnt = {}
     for d in demos:
@@ -167,7 +181,7 @@ def main():
     for n in news:
         srcs = n.get("sources") or [{"url": u, "label": "", "by": ""} for u in (n.get("source_urls") or [n.get("source_url")]) if u]
         srcs = sorted(srcs, key=lambda x: x.get("label") != "官方")  # official first (stable)
-        r = dict(glossary=n.get("glossary"), bullets_zh=n.get("bullets_zh"), title_zh=n.get("title_zh"), lang=n.get("lang"), date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
+        r = dict(glossary=n.get("glossary"), lang=n.get("lang"), date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
         old = idx.get((n["date"], n["model"].lower()))
         if old: old.update(r)
         else: rows.append(r)
@@ -182,16 +196,12 @@ def main():
     news_html = ''
     for r in rows:
         head = rich(r["title"]) if r["title"] else E(r["model"])
-        used = set(); gl = r.get("glossary"); zh = r.get("bullets_zh")
+        used = set(); gl = r.get("glossary")
         if r["title"]: head = annotate(head, gl, used)
         lis = "".join(f'<li>{annotate(rich(x), gl, used)}</li>' for x in r["bullets"])
-        zh_block = ""
-        if zh:  # pre-written Chinese translation, shown instead of the English when html.show-zh (global 译 toggle)
-            zh_block = f'<ul class="points zh-only" lang="zh-CN">{"".join(f"<li>{rich(x)}</li>" for x in zh)}</ul>'
-            if r.get("title_zh"): head = f'<span class="en-only">{head}</span><span class="zh-only" lang="zh-CN">{rich(r["title_zh"])}</span>'
-        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}{" has-zh" if zh else ""}"{' lang="en"' if r.get("lang") == "en" else ""}><h2 class="item-title">{head}</h2>'
+        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}"{' lang="en"' if r.get("lang") == "en" else ""}><h2 class="item-title">{head}</h2>'
                       f'<p class="item-meta"><span class="model-tag">{E(r["model"])}</span><span>{E(r["maker"])}</span><span class="dot" aria-hidden="true">·</span><time class="ts">{E(r["date"])}</time></p>'
-                      f'<ul class="points{" en-only" if zh else ""}">{lis}</ul>{zh_block}<p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
+                      f'<ul class="points">{lis}</ul><p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
     noscript = "".join(f'<li><a href="{E(d.get("source_url"))}">{E(d.get("title"))}</a> · @{E(d.get("author"))} · {E(d.get("date"))}</li>' for d in demos)
     demos_html = (f'      <nav class="chips" aria-label="按模型筛选" id="chips"></nav>\n'
                   f'      <div class="wall" id="wall" data-src="data.json?v={data_ver}" aria-live="polite"></div>\n'
