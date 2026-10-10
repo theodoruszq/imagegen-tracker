@@ -5,7 +5,8 @@
   "maker": "OpenAI",
   "change": "First DALL·E text-to-image model announced",
   "source_url": "https://openai.com/index/dall-e/",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "OpenAI 发布首个 DALL·E 文生图模型"
  },
  {
   "date": "2022-04-06",
@@ -13,7 +14,8 @@
   "maker": "OpenAI",
   "change": "DALL·E 2 announced (diffusion, higher resolution, inpainting)",
   "source_url": "https://openai.com/index/dall-e-2/",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "DALL·E 2 发布（扩散模型，更高分辨率，支持 inpainting）"
  },
  {
   "date": "2022-08-22",
@@ -21,7 +23,8 @@
   "maker": "Stability AI",
   "change": "Public open-weights release of Stable Diffusion",
   "source_url": "https://stability.ai/news/stable-diffusion-public-release",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "Stable Diffusion 以开放权重公开发布"
  },
  {
   "date": "2023-07-26",
@@ -29,7 +32,8 @@
   "maker": "Stability AI",
   "change": "SDXL 1.0 open release",
   "source_url": "https://stability.ai/news/stable-diffusion-sdxl-1-announcement",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "SDXL 1.0 开放发布"
  },
  {
   "date": "2023-09-20",
@@ -37,7 +41,8 @@
   "maker": "OpenAI",
   "change": "DALL·E 3 announced, integrated with ChatGPT",
   "source_url": "https://openai.com/index/dall-e-3/",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "DALL·E 3 发布，并集成进 ChatGPT"
  },
  {
   "date": "2025-03-25",
@@ -45,7 +50,8 @@
   "maker": "OpenAI",
   "change": "Native image generation in GPT-4o / ChatGPT",
   "source_url": "https://openai.com/index/introducing-4o-image-generation/",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "GPT-4o / ChatGPT 原生图像生成上线"
  },
  {
   "date": "2025-04-23",
@@ -53,7 +59,8 @@
   "maker": "OpenAI",
   "change": "Image generation model released in the API",
   "source_url": "https://openai.com/index/image-generation-api/",
-  "verification": "well_known_not_refetched"
+  "verification": "well_known_not_refetched",
+  "change_zh": "图像生成模型 gpt-image-1 登陆 API"
  },
  {
   "date": "2025-08-26",
@@ -61,7 +68,8 @@
   "maker": "Google",
   "change": "Viral image gen/edit model: multi-image blending, character consistency, NL edits",
   "source_url": "https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "爆款生图/编辑模型：多图融合、角色一致性、自然语言编辑"
  },
  {
   "date": "2025-09-28",
@@ -69,7 +77,8 @@
   "maker": "Tencent",
   "change": "80B MoE native multimodal image model open-sourced",
   "source_url": "https://github.com/Tencent-Hunyuan/HunyuanImage-3.0",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "开源 80B MoE 原生多模态生图模型"
  },
  {
   "date": "2025-11-20",
@@ -77,7 +86,8 @@
   "maker": "Google",
   "change": "Studio-quality gen/edit, better multilingual text, up to 4K",
   "source_url": "https://blog.google/innovation-and-ai/products/nano-banana-pro/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "影棚级生成与编辑，多语言文字渲染更好，最高 4K"
  },
  {
   "date": "2025-11-25",
@@ -85,7 +95,8 @@
   "maker": "Black Forest Labs",
   "change": "FLUX.2 family (pro/flex/dev 32B open weights), up to 10 references, 4MP",
   "source_url": "https://bfl.ai/blog/flux-2",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "FLUX.2 系列（pro / flex / dev，dev 为 32B 开放权重），最多 10 张参考图，4MP"
  },
  {
   "date": "2025-12-16",
@@ -93,7 +104,8 @@
   "maker": "OpenAI",
   "change": "Better instruction following/edits, up to 4x faster, ~20% cheaper API",
   "source_url": "https://openai.com/index/new-chatgpt-images-is-here/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "指令遵循与编辑更好，速度最高快 4 倍，API 价格约降 20%"
  },
  {
   "date": "2026-02-10",
@@ -101,7 +113,8 @@
   "maker": "Alibaba Qwen",
   "change": "Unified generation+editing, native 2K, 1K-token instructions",
   "source_url": "https://news.aibase.com/news/25422",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "生成与编辑一体，原生 2K，支持 1K token 长指令"
  },
  {
   "date": "2026-02-26",
@@ -109,7 +122,8 @@
   "maker": "Google",
   "change": "Pro-level quality at Flash speed; replaces NB Pro as Gemini default",
   "source_url": "https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "以 Flash 速度提供 Pro 级质量，取代 NB Pro 成为 Gemini 默认"
  },
  {
   "date": "2026-03-17",
@@ -117,7 +131,8 @@
   "maker": "Midjourney",
   "change": "V8 early-access alpha: ~4-5x faster, native HD, better text",
   "source_url": "https://updates.midjourney.com/v8-alpha/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "V8 抢先体验 alpha：速度约快 4–5 倍，原生 HD，文字更好"
  },
  {
   "date": "2026-04-14",
@@ -125,7 +140,8 @@
   "maker": "Midjourney",
   "change": "V8.1: V7-like aesthetic, HD 3x faster/cheaper, image prompts back",
   "source_url": "https://updates.midjourney.com/v8-1-alpha/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "V8.1：回归 V7 式美学，HD 快 3 倍且更便宜，图像提示回归"
  },
  {
   "date": "2026-04-21",
@@ -133,7 +149,8 @@
   "maker": "OpenAI",
   "change": "gpt-image-2 in API/Codex + ChatGPT Images 2.0; #1 on Image Arena at launch",
   "source_url": "https://openai.com/index/introducing-chatgpt-images-2-0/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "gpt-image-2 登陆 API / Codex，ChatGPT Images 2.0 上线；发布时 Image Arena 第一"
  },
  {
   "date": "2026-07-08",
@@ -141,7 +158,8 @@
   "maker": "ByteDance Seed",
   "change": "Infographics, interactive precise editing, layer decomposition, 10+ languages",
   "source_url": "https://seed.bytedance.com/en/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "信息图、交互式精确编辑、图层分解，支持 10+ 种语言"
  },
  {
   "date": "2026-07-23",
@@ -149,7 +167,8 @@
   "maker": "Black Forest Labs",
   "change": "Unified multimodal model (image/video/audio/action); video first, image 'in coming weeks'",
   "source_url": "https://bfl.ai/blog/flux-3",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "统一多模态模型（图像/视频/音频/动作）；视频先发，图像“未来几周”推出"
  },
  {
   "date": "2026-07-24",
@@ -157,7 +176,8 @@
   "maker": "Midjourney",
   "change": "V8.2 becomes default; new Edit Model replaces Omni/Character Reference & Retexture",
   "source_url": "https://docs.midjourney.com/hc/en-us/articles/32199405667853-Version",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "V8.2 成为默认版本；新 Edit Model 取代 Omni/Character Reference 与 Retexture"
  },
  {
   "date": "2026-09-08",
@@ -165,7 +185,8 @@
   "maker": "OpenAI",
   "change": "Sharper detail, better reference preservation & multi-turn edits, up to 50% lower latency; two API models",
   "source_url": "https://openai.com/index/introducing-chatgpt-images-2-5/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "细节更锐利，参考图保持与多轮编辑更好，延迟最多降 50%；API 提供两个模型"
  },
  {
   "date": "2026-09-22",
@@ -173,7 +194,8 @@
   "maker": "Tencent Hunyuan",
   "change": "Pro image model for T2I, reference generation, multi-turn editing; TokenHub API",
   "source_url": "https://news.qq.com/rain/a/20260922A049W000",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "专业级图像模型：文生图、参考图生成、多轮编辑；TokenHub API 提供"
  },
  {
   "date": "2026-09-30",
@@ -181,7 +203,8 @@
   "maker": "Ideogram",
   "change": "Precise multi-turn edit model without artifact build-up",
   "source_url": "https://ideogram.ai/models/4.5/",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "精确多轮编辑模型，不累积伪影"
  },
  {
   "date": "2026-10-01",
@@ -189,7 +212,8 @@
   "maker": "Black Forest Labs",
   "change": "Image model of FLUX 3: pixel-preserving edits, bbox layout, 10 refs, 4K",
   "source_url": "https://x.com/bfl_ai/status/2105734605621825738",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "FLUX 3 的图像模型：像素级保持编辑、bbox 布局、10 张参考图、4K"
  },
  {
   "date": "2026-10-06",
@@ -197,7 +221,8 @@
   "maker": "Google",
   "change": "Upgraded gen/edit: visual design, mask-based editing, subject consistency, lower price",
   "source_url": "https://x.com/Google/status/2107501209154204148",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "生成/编辑升级：视觉设计、蒙版编辑、主体一致性，价格更低"
  },
  {
   "date": "2026-10-09",
@@ -205,6 +230,7 @@
   "maker": "Alibaba Qwen",
   "change": "8-step accelerated open-weights checkpoint of Qwen-Image-2.1",
   "source_url": "https://x.com/Alibaba_Qwen/status/2108549075218120949",
-  "verification": "verified_this_run"
+  "verification": "verified_this_run",
+  "change_zh": "Qwen-Image-2.1 的 8 步加速开放权重 checkpoint"
  }
 ]
