@@ -85,6 +85,13 @@ def page(title, body, ver, desc):
 </html>
 """
 
+def rich(text):
+    """HTML-escape, then allow **bold** -> <strong class=hl>, ==mark== -> <mark>, and tag 未经官方确认."""
+    t = E(text)
+    t = re.sub(r"\*\*(.+?)\*\*", r'<strong class="hl">\1</strong>', t)
+    t = re.sub(r"==(.+?)==", r"<mark>\1</mark>", t)
+    return t.replace("未经官方确认", '<span class="unconf">未经官方确认</span>')
+
 def write(rel, s):
     path = os.path.join(DOCS, rel); os.makedirs(os.path.dirname(path), exist_ok=True)
     if not os.path.exists(path) or open(path, encoding="utf-8").read() != s:
@@ -139,7 +146,7 @@ def main():
     for n in news:
         srcs = n.get("sources") or [{"url": u, "label": "", "by": ""} for u in (n.get("source_urls") or [n.get("source_url")]) if u]
         srcs = sorted(srcs, key=lambda x: x.get("label") != "官方")  # official first (stable)
-        r = dict(date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
+        r = dict(lang=n.get("lang"), date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
         old = idx.get((n["date"], n["model"].lower()))
         if old: old.update(r)
         else: rows.append(r)
@@ -151,11 +158,11 @@ def main():
             cls = " off" if x.get("label") == "官方" else (" com" if x.get("label") == "社区" else "")
             out.append(f'<a class="orig src{cls}" href="{E(x["url"])}" rel="noopener"><span class="src-lab">{E(lab)}</span>{by}{EXT}</a>')
         return '<span class="dot" aria-hidden="true">·</span>'.join(out)
-    news_html = f'      <p class="lede">模型发布与重大更新，按时间倒序；要点译自原帖，未经官方确认的信息已标注。共 {len(rows)} 条 · 更新于 {E(updated)}（UTC）</p>\n'
+    news_html = f'      <p class="lede">模型发布与重大更新，按时间倒序；要点保留原帖语言，关键信息加粗，未经官方确认的信息已标注。共 {len(rows)} 条 · 更新于 {E(updated)}（UTC）</p>\n'
     for r in rows:
-        head = E(r["title"]) if r["title"] else E(r["model"])
-        lis = "".join(f'<li>{E(x).replace("未经官方确认", "<span class=unconf>未经官方确认</span>")}</li>' for x in r["bullets"])
-        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}"><h2 class="item-title">{head}</h2>'
+        head = rich(r["title"]) if r["title"] else E(r["model"])
+        lis = "".join(f'<li>{rich(x)}</li>' for x in r["bullets"])
+        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}"{' lang="en"' if r.get("lang") == "en" else ""}><h2 class="item-title">{head}</h2>'
                       f'<p class="item-meta"><span class="model-tag">{E(r["model"])}</span><span>{E(r["maker"])}</span><span class="dot" aria-hidden="true">·</span><time class="ts">{E(r["date"])}</time></p>'
                       f'<ul class="points">{lis}</ul><p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
     noscript = "".join(f'<li><a href="{E(d.get("source_url"))}">{E(d.get("title"))}</a> · @{E(d.get("author"))} · {E(d.get("date"))}</li>' for d in demos)

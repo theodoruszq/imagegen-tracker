@@ -8,7 +8,7 @@ This repo tracks (A) releases and major updates of the top AI image-generation m
 
 A single page (`docs/index.html`) with two centered tabs:
 
-- **News** (`#news`): model releases and updates, newest first. Each item has a Chinese bullet summary of the original post(s) and labelled source links, 官方 first and then 社区. Older verified milestones from `data/timeline.json` are merged in.
+- **News** (`#news`): model releases and updates, newest first. Each item has a bullet summary in the original post's language, with key facts in bold, and labelled source links, 官方 first and then 社区. Older verified milestones from `data/timeline.json` are merged in.
 - **Demos** (`#demos`, `#demos/<model>` for a filter): a compact masonry wall of ~220px columns (2 on mobile, up to 6 on desktop) with model filter chips. It renders in batches of 30 as you scroll. Clicking a card opens a lightbox (Esc closes it, ← → navigate, swipe works on mobile) showing the full-size image(s), model/maker, author, date, the full prompt with a copy button, and the original post link. `#<uid>`, e.g. `#x-2107671007029076318`, is the permalink that opens it.
 - Demo data comes from one compact file, `docs/data.json`. The wall loads only ~400px thumbnails with `width`/`height` attributes and `loading="lazy"`; the full 1600px webp loads only in the lightbox.
 - Visual feel borrowed from [theodoruszq/x-digest](https://github.com/theodoruszq/x-digest): its color palette with light/dark theme and its Lato + PingFang font stack (Lato woff2 is vendored in the repo). The layout is the site's own. No CDNs and no external requests.
@@ -42,8 +42,9 @@ scripts/static/        css / js / fonts / icon sources
 Common: `uid`, `type` (`news`|`demo`), `date` (YYYY-MM-DD, UTC), `model`, `maker`, `author` (X handle, no @), `source_url` (primary/official), `source_urls` [all], `title`, `image_hashes` [sha256], `archived_run`.
 
 News only (no prompt field):
-- `title`: a Chinese headline.
-- `bullets` [str]: a complete, faithful Chinese summary of the original post(s), keeping model names and terms in English. Cover what's new, capabilities, specs and parameters, pricing, availability and channels, license and open weights, and links. Anything not confirmed by the official source is marked `未经官方确认`.
+- `title`: a headline in the original post's language.
+- `lang`: the source language (`en`, `zh`, ...).
+- `bullets` [str]: a complete, faithful summary of the original post(s) **in the original post's language** (English source → English, Chinese source → Chinese; never auto-translate), with wording kept close to the original. Cover what's new, capabilities, specs and parameters, pricing, availability and channels, license and open weights, and links. **Bold the key facts** with `**...**` (price, speed, quality/benchmark gains, resolution, step counts, availability); `==...==` also works for a highlight. The build HTML-escapes everything else. Anything not confirmed by the official source is marked `未经官方确认` in every language, for consistency with the Chinese UI.
 - `sources` [{url, label: 官方|社区, by}]: official sources first.
 - `notes_internal`: not shown on the site.
 
