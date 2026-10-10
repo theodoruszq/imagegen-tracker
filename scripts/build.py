@@ -65,7 +65,7 @@ def page(title, body, ver, desc):
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/lato-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/style.css?v={ver}">
-  <script>(function(){{var d=document.documentElement;d.classList.add('js');try{{var t=localStorage.getItem('igt.theme');if(t)d.dataset.theme=t;}}catch(e){{}}var h=location.hash.slice(1);if(h&&h!=='news')d.classList.add('tab-demos');}})();</script>
+  <script>(function(){{var d=document.documentElement;d.classList.add('js');try{{var t=localStorage.getItem('igt.theme');if(t)d.dataset.theme=t;if(localStorage.getItem('igt.zh')==='1')d.classList.add('show-zh');}}catch(e){{}}var h=location.hash.slice(1);if(h&&h!=='news')d.classList.add('tab-demos');}})();</script>
   <script src="assets/site.js?v={ver}" defer></script>
 </head>
 <body>
@@ -75,6 +75,7 @@ def page(title, body, ver, desc):
       <a class="tab on" role="tab" href="#news" data-tab="news" aria-selected="true" aria-controls="panel-news">News</a>
       <a class="tab" role="tab" href="#demos" data-tab="demos" aria-selected="false" aria-controls="panel-demos">Demos</a>
     </nav>
+    <button type="button" class="tr-toggle" data-toggle-zh role="switch" aria-checked="false" aria-label="英文内容切换为中文翻译" title="EN ↔ 中：英文内容切换为中文翻译"><span class="tr-en">EN</span><span class="tr-arrow" aria-hidden="true">↔</span><span class="tr-zh">中</span></button>
     <button type="button" class="theme-btn" data-toggle-theme aria-label="切换深色/浅色" title="切换深色/浅色"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg></button>
   </header>
   <main id="main">
@@ -91,6 +92,25 @@ def rich(text):
     t = re.sub(r"\*\*(.+?)\*\*", r'<strong class="hl">\1</strong>', t)
     t = re.sub(r"==(.+?)==", r"<mark>\1</mark>", t)
     return t.replace("未经官方确认", '<span class="unconf">未经官方确认</span>')
+
+def annotate(h, glossary, used):
+    """Wrap the first occurrence (per item; `used` is shared across fields) of each glossary term in
+    already-rendered HTML. Only text outside tags is touched; case-insensitive, word boundaries."""
+    terms = sorted((g for g in glossary or [] if g.get("term") and g.get("gloss")), key=lambda g: -len(g["term"]))
+    if not terms: return h
+    parts = re.split(r"(<[^>]+>)", h)
+    for i, seg in enumerate(parts):
+        if not seg or seg.startswith("<"): continue
+        hits = []  # (start, end, gloss) non-overlapping, longest terms first
+        for g in terms:
+            if g["term"].lower() in used: continue
+            for m in re.finditer(r"(?<![\w-])" + re.escape(E(g["term"])) + r"(?![\w-])", seg, re.I):
+                if all(m.end() <= x0 or m.start() >= x1 for x0, x1, _ in hits):
+                    hits.append((m.start(), m.end(), g["gloss"])); used.add(g["term"].lower()); break
+        for x0, x1, gloss in sorted(hits, reverse=True):
+            seg = seg[:x0] + f'<span class="gl" tabindex="0" data-gl="{E(gloss)}">{seg[x0:x1]}</span>' + seg[x1:]
+        parts[i] = seg
+    return "".join(parts)
 
 def write(rel, s):
     path = os.path.join(DOCS, rel); os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -130,7 +150,8 @@ def main():
             imgs.append([h, w, hh, tw, th])
         rec = {"u": d["uid"], "d": d.get("date"), "t": d.get("title"), "m": d.get("model"), "mk": d.get("maker"),
                "a": d.get("author"), "s": d.get("source_url"), "p": d.get("prompt"), "ps": d.get("prompt_source"),
-               "partial": (d.get("prompt_status") or "").startswith("partial") or None, "k": model_keys(d), "i": imgs}
+               "partial": (d.get("prompt_status") or "").startswith("partial") or None, "k": model_keys(d), "i": imgs,
+               "x": d.get("text"), "xz": d.get("text_zh"), "pz": d.get("prompt_zh"), "g": [[g["term"], g["gloss"]] for g in d.get("glossary") or []]}
         out.append({k: v for k, v in rec.items() if v not in (None, "", [])})
     cnt = {}
     for d in demos:
@@ -146,7 +167,7 @@ def main():
     for n in news:
         srcs = n.get("sources") or [{"url": u, "label": "", "by": ""} for u in (n.get("source_urls") or [n.get("source_url")]) if u]
         srcs = sorted(srcs, key=lambda x: x.get("label") != "官方")  # official first (stable)
-        r = dict(lang=n.get("lang"), date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
+        r = dict(glossary=n.get("glossary"), bullets_zh=n.get("bullets_zh"), title_zh=n.get("title_zh"), lang=n.get("lang"), date=n["date"], model=n["model"], maker=n["maker"], title=n.get("title"), bullets=n.get("bullets") or [n.get("title")], sources=srcs)
         old = idx.get((n["date"], n["model"].lower()))
         if old: old.update(r)
         else: rows.append(r)
@@ -161,10 +182,16 @@ def main():
     news_html = f'      <p class="lede">模型发布与重大更新，按时间倒序；要点保留原帖语言，关键信息加粗，未经官方确认的信息已标注。共 {len(rows)} 条 · 更新于 {E(updated)}（UTC）</p>\n'
     for r in rows:
         head = rich(r["title"]) if r["title"] else E(r["model"])
-        lis = "".join(f'<li>{rich(x)}</li>' for x in r["bullets"])
-        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}"{' lang="en"' if r.get("lang") == "en" else ""}><h2 class="item-title">{head}</h2>'
+        used = set(); gl = r.get("glossary"); zh = r.get("bullets_zh")
+        if r["title"]: head = annotate(head, gl, used)
+        lis = "".join(f'<li>{annotate(rich(x), gl, used)}</li>' for x in r["bullets"])
+        zh_block = ""
+        if zh:  # pre-written Chinese translation, shown instead of the English when html.show-zh (global 译 toggle)
+            zh_block = f'<ul class="points zh-only" lang="zh-CN">{"".join(f"<li>{rich(x)}</li>" for x in zh)}</ul>'
+            if r.get("title_zh"): head = f'<span class="en-only">{head}</span><span class="zh-only" lang="zh-CN">{rich(r["title_zh"])}</span>'
+        news_html += (f'      <article class="news-item{" rich" if r["title"] else ""}{" has-zh" if zh else ""}"{' lang="en"' if r.get("lang") == "en" else ""}><h2 class="item-title">{head}</h2>'
                       f'<p class="item-meta"><span class="model-tag">{E(r["model"])}</span><span>{E(r["maker"])}</span><span class="dot" aria-hidden="true">·</span><time class="ts">{E(r["date"])}</time></p>'
-                      f'<ul class="points">{lis}</ul><p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
+                      f'<ul class="points{" en-only" if zh else ""}">{lis}</ul>{zh_block}<p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
     noscript = "".join(f'<li><a href="{E(d.get("source_url"))}">{E(d.get("title"))}</a> · @{E(d.get("author"))} · {E(d.get("date"))}</li>' for d in demos)
     demos_html = (f'      <p class="lede wide">X 上的生图案例与提示词，共 {len(demos)} 个。点图片看大图与完整提示词（Esc 关闭，← → 切换，可滑动）。</p>\n'
                   f'      <nav class="chips" aria-label="按模型筛选" id="chips"></nav>\n'

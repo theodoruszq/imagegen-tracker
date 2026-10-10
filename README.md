@@ -11,7 +11,7 @@ A single page (`docs/index.html`) with two centered tabs:
 - **News** (`#news`): model releases and updates, newest first. Each item has a bullet summary in the original post's language, with key facts in bold, and labelled source links, 官方 first and then 社区. Older verified milestones from `data/timeline.json` are merged in.
 - **Demos** (`#demos`, `#demos/<model>` for a filter): a compact masonry wall of ~220px columns (2 on mobile, up to 6 on desktop) with model filter chips. It renders in batches of 30 as you scroll. Clicking a card opens a lightbox (Esc closes it, ← → navigate, swipe works on mobile) showing the full-size image(s), model/maker, author, date, the full prompt with a copy button, and the original post link. `#<uid>`, e.g. `#x-2107671007029076318`, is the permalink that opens it.
 - Demo data comes from one compact file, `docs/data.json`. The wall loads only ~400px thumbnails with `width`/`height` attributes and `loading="lazy"`; the full 1600px webp loads only in the lightbox.
-- Visual feel borrowed from [theodoruszq/x-digest](https://github.com/theodoruszq/x-digest): its color palette with light/dark theme and its Lato + PingFang font stack (Lato woff2 is vendored in the repo). The layout is the site's own. No CDNs and no external requests.
+- English help follows x-digest: glossary popovers on hard terms, and one remembered EN ↔ 中 toggle in the header. Visual feel is also borrowed from [theodoruszq/x-digest](https://github.com/theodoruszq/x-digest): its color palette with light/dark theme and its Lato + PingFang font stack (Lato woff2 is vendored in the repo). The layout is the site's own. No CDNs and no external requests.
 
 ## Layout
 
@@ -46,6 +46,7 @@ News only (no prompt field):
 - `lang`: the source language (`en`, `zh`, ...).
 - `bullets` [str]: a complete, faithful summary of the original post(s) **in the original post's language** (English source → English, Chinese source → Chinese; never auto-translate), with wording kept close to the original. Cover what's new, capabilities, specs and parameters, pricing, availability and channels, license and open weights, and links. **Bold the key facts** with `**...**` (price, speed, quality/benchmark gains, resolution, step counts, availability); `==...==` also works for a highlight. The build HTML-escapes everything else. Anything not confirmed by the official source is marked `未经官方确认` in every language, for consistency with the Chinese UI.
 - `sources` [{url, label: 官方|社区, by}]: official sources first.
+- For non-Chinese sources, also write a translation: `title_zh` (str) and `bullets_zh` [str], with **exactly one Chinese bullet per original bullet** in the same order and the same `**bold**` key facts.
 - `notes_internal`: not shown on the site.
 
 Demos only:
@@ -53,7 +54,16 @@ Demos only:
 - `prompt_source`: e.g. the author's self-reply URL; kept out of `prompt` so 复制 copies a clean prompt.
 - `prompt_status` (`found` / `partial ...` / `not found`).
 - `text`: the original post text.
+- For English (or other non-Chinese) posts, also write a translation: `text_zh` for the post text and `prompt_zh` for the prompt. 复制 always copies the original `prompt`; `prompt_zh` is for reading only.
+- `lang` / `prompt_lang`: the language of the post / prompt (`en`, `zh`, ...).
 - `metrics`, `created_at`, `summary`: optional.
+
+### English help: glossary + global EN ↔ 中 toggle (same idea as x-digest)
+
+- `glossary` [{term, gloss}] on any item with English content: 3–10 harder English words or phrases. Use the exact surface form as it appears in the text, and write the gloss x-digest style with part of speech plus a short Chinese meaning, e.g. `{"term": "artifact buildup", "gloss": "n. 伪影累积"}`. Skip trivial words and product names.
+- The site wraps the first occurrence of each term in the title, bullets, post text and prompt with a dotted underline. Its gloss shows as a popover on hover, keyboard focus or tap.
+- One global **EN ↔ 中** button in the header (remembered in `localStorage` as `igt.zh`, like x-digest's 中文 switch) swaps every English title, bullet, post text and prompt that has a `*_zh` version for the Chinese translation. Content without a translation stays as is.
+- Translations and glosses are written by the routine itself at archive time. There is no runtime translation API.
 
 ## Image policy
 

@@ -143,3 +143,33 @@ mark { background: var(--hl-bg); color: var(--text); padding: 0 2px; border-radi
 :root[data-theme="dark"] { --hl-bg: rgba(245, 165, 74, .22); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --hl-bg: rgba(245, 165, 74, .22); } }
 .news-item[lang="en"] .points { font-family: var(--sans); }
+
+/* EN <-> 中 global toggle (html.show-zh, remembered like x-digest's 中文 switch) */
+.zh-only { display: none; }
+.show-zh .zh-only { display: revert; }
+.show-zh .en-only { display: none; }
+span.zh-only, .show-zh span.zh-only { white-space: inherit; }
+.show-zh span.zh-only { display: inline; }
+.tr-toggle { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); appearance: none; border: 1px solid var(--rule); background: var(--bg);
+  color: var(--muted); height: 28px; padding: 0 9px; border-radius: 999px; font: inherit; font-size: 12px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+.tr-toggle:hover { color: var(--text); }
+.tr-toggle .tr-arrow { color: var(--faint); }
+.tr-en { font-weight: 700; color: var(--text); }
+.show-zh .tr-en { font-weight: 400; color: inherit; }
+.show-zh .tr-zh { font-weight: 700; color: var(--link); }
+.show-zh .tr-toggle { border-color: var(--link); }
+
+/* glossary terms: dotted underline + popover on hover / focus / tap */
+.gl { position: relative; border-bottom: 1px dotted var(--zh); cursor: help; outline: none; }
+.gl::after { content: attr(data-gl); position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 20; width: max-content; max-width: 220px;
+  padding: 4px 9px; border-radius: 6px; background: var(--zh-bg); color: var(--zh); border: 1px solid var(--zh-line); box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  font-family: var(--sans); font-size: 12px; font-weight: 400; line-height: 1.5; white-space: normal; text-align: left;
+  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .12s; }
+.gl.flip::after { left: auto; right: 0; }
+.gl:hover::after, .gl:focus::after, .gl.open::after { opacity: 1; visibility: visible; }
+.gl:focus-visible { background: var(--zh-bg); }
+.show-zh .gl { border-bottom-color: transparent; }
+.lb-h { font-size: 12px; font-weight: 400; color: var(--muted); margin: 16px 0 4px; }
+.post-text { margin: 0; padding: 0 0 0 12px; border-left: 2px solid var(--quote-rule); color: var(--body); font-size: 13px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prompt-text .gl::after { white-space: normal; }
+@media (max-width: 560px) { .tr-toggle { right: 44px; padding: 0 7px; } .topbar { padding-right: 96px; padding-left: 96px; justify-content: center; } }
