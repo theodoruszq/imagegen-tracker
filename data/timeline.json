@@ -183,6 +183,21 @@
   "lang": "en"
  },
  {
+  "date": "2026-07-07",
+  "model": "Muse Image",
+  "maker": "Meta",
+  "change": "First image model from Meta Superintelligence Labs: agentic generation, precise edits, multi-reference composition; #2 on Image Arena at launch",
+  "source_url": "https://x.com/AIatMeta/status/2074577662840832382",
+  "verification": "verified_this_run",
+  "lang": "en",
+  "glossary": [
+   {
+    "term": "agentic",
+    "gloss": "adj. 智能体式的（可自主调用工具）"
+   }
+  ]
+ },
+ {
   "date": "2026-07-08",
   "model": "Seedream 5.0 Pro",
   "maker": "ByteDance Seed",

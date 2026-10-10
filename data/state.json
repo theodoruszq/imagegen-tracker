@@ -1,11 +1,12 @@
 {
- "last_run_utc": "2026-10-10T04:20:00Z",
- "last_run_label": "2026-10-10_PM backfill (window since 2026-10-03T00:00Z)",
- "x_calls_used": 23,
+ "last_run_utc": "2026-10-10T13:20:00Z",
+ "last_run_label": "2026-10-10_PM2 (scheduled 21:03 run; window since 2026-10-10T04:20Z)",
+ "x_calls_used": 25,
  "image_hash_rule": "sha256 of final .webp bytes (Pillow, max width 1600px, quality 85)",
- "notes": "2 demos (x-2108118600968282486, x-2106274477898367244) excluded at import as too suggestive; their uids are listed in skipped_uids so future runs don't re-add them.",
+ "notes": "2 demos (x-2108118600968282486, x-2106274477898367244) excluded at import as too suggestive; their uids are listed in skipped_uids so future runs don't re-add them. | 2026-10-10 PM2: x-2108814817763250576 (Qwen-Image-2.1-Turbo 'uncensored' post) skipped as suggestive.",
  "skipped_uids": [
   "x-2106274477898367244",
-  "x-2108118600968282486"
+  "x-2108118600968282486",
+  "x-2108814817763250576"
  ]
 }
