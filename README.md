@@ -1,8 +1,10 @@
 # ImageGen Tracker · AI 生图模型追踪
 
+**🌐 网站 / Site: https://theodoruszq.github.io/imagegen-tracker/**
+
 Tracks (A) releases and major updates of the top AI image-generation models (GPT Image / ChatGPT Images, Nano Banana / Gemini / Imagen, Midjourney, FLUX, Seedream, Grok Imagine, Ideogram, Recraft, Qwen-Image, Hunyuan/Hy Image, Kling/Kolors, plus any new SOTA contender) and (B) standout showcase posts from X, preferably ones that share their prompts.
 
-Site: https://theodoruszq.github.io/imagegen-tracker/ (GitHub Pages, `main:/docs`).
+Served by GitHub Pages from `main:/docs`.
 
 ## Layout
 
@@ -39,6 +41,7 @@ Images are stored once, under `docs/images_blobs/`, so Pages serves them directl
 | title | str | one-line description |
 | summary | str | notes, caveats, why it matters |
 | prompt | str \| null | full prompt if found (author's post or self-replies), else null (shown as 不详) |
+| prompt_source | str | optional: where the prompt came from (self-reply URL, notes); kept out of `prompt` so copy gives a clean prompt |
 | prompt_status | str | demos: `found`, `partial`, `not found`, plus detail |
 | text | str \| null | original post text (demos) |
 | image_hashes | [sha256] | each maps to `docs/images_blobs/<h[:2]>/<h>.webp` |
@@ -47,6 +50,10 @@ Images are stored once, under `docs/images_blobs/`, so Pages serves them directl
 ## Image policy
 
 Download the original media (`pbs.twimg.com/...?name=orig`) and convert it to WebP (Pillow, max 1600 px wide, quality 85). `sha256` is computed over the **final webp bytes**, and the file is saved as `docs/images_blobs/<h[:2]>/<h>.webp`. Videos are not stored (link only). Keep content tasteful: leave out demos whose images are suggestive beyond normal fashion photography.
+
+## Site
+
+The visual style follows [theodoruszq/x-digest](https://github.com/theodoruszq/x-digest): same palette with light/dark theme, Lato + PingFang type stack (Lato woff2 vendored in `scripts/static/fonts/`), 960px shell with a left rail, top-right toolbar, and item-meta/quote styles. The demo wall is a masonry (CSS columns) with model filter chips (`demos.html#m=FLUX` deep-links a filter). Every card shows its prompt, clamped, expandable and copyable. Static assets live in `scripts/static/` and are copied to `docs/assets/` by the build.
 
 ## Build
 
