@@ -51,7 +51,7 @@ h2, h3 { margin: 0; font-weight: 700; line-height: 1.45; }
 
 /* panels (no-JS: both visible) */
 .js:not(.tab-demos) #panel-demos, .js.tab-demos #panel-news { display: none; }
-main { padding: 22px 0 0; }
+main { padding: 10px 0 0; }
 .panel.news { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 .panel.demos { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
 .lede { color: var(--muted); font-size: 13px; text-align: center; margin: 0 0 16px; }

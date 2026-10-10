@@ -179,7 +179,7 @@ def main():
             cls = " off" if x.get("label") == "官方" else (" com" if x.get("label") == "社区" else "")
             out.append(f'<a class="orig src{cls}" href="{E(x["url"])}" rel="noopener"><span class="src-lab">{E(lab)}</span>{by}{EXT}</a>')
         return '<span class="dot" aria-hidden="true">·</span>'.join(out)
-    news_html = f'      <p class="lede">模型发布与重大更新，按时间倒序；要点保留原帖语言，关键信息加粗，未经官方确认的信息已标注。共 {len(rows)} 条 · 更新于 {E(updated)}（UTC）</p>\n'
+    news_html = ''
     for r in rows:
         head = rich(r["title"]) if r["title"] else E(r["model"])
         used = set(); gl = r.get("glossary"); zh = r.get("bullets_zh")
@@ -193,8 +193,7 @@ def main():
                       f'<p class="item-meta"><span class="model-tag">{E(r["model"])}</span><span>{E(r["maker"])}</span><span class="dot" aria-hidden="true">·</span><time class="ts">{E(r["date"])}</time></p>'
                       f'<ul class="points{" en-only" if zh else ""}">{lis}</ul>{zh_block}<p class="item-meta srcs">{src_links(r["sources"])}</p></article>\n')
     noscript = "".join(f'<li><a href="{E(d.get("source_url"))}">{E(d.get("title"))}</a> · @{E(d.get("author"))} · {E(d.get("date"))}</li>' for d in demos)
-    demos_html = (f'      <p class="lede wide">X 上的生图案例与提示词，共 {len(demos)} 个。点图片看大图与完整提示词（Esc 关闭，← → 切换，可滑动）。</p>\n'
-                  f'      <nav class="chips" aria-label="按模型筛选" id="chips"></nav>\n'
+    demos_html = (f'      <nav class="chips" aria-label="按模型筛选" id="chips"></nav>\n'
                   f'      <div class="wall" id="wall" data-src="data.json?v={data_ver}" aria-live="polite"></div>\n'
                   f'      <div id="sentinel" aria-hidden="true"></div>\n'
                   f'      <noscript><ul class="summary-list">{noscript}</ul></noscript>\n')
