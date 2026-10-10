@@ -175,7 +175,7 @@ def main():
     data_ver = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:8]
 
     # ---- News tab: news items (bullets + labelled sources) merged with timeline.json, newest first ----
-    rows = [dict(date=t["date"], model=t["model"], maker=t["maker"], title=None, bullets=[t.get("change_zh") or t["change"]],
+    rows = [dict(date=t["date"], model=t["model"], maker=t["maker"], title=None, bullets=[t["change"]], glossary=t.get("glossary"),
                  sources=[{"url": t["source_url"], "label": "", "by": ""}]) for t in tl]
     idx = {(r["date"], r["model"].lower()): r for r in rows}
     for n in news:

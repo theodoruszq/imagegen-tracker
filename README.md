@@ -17,7 +17,7 @@ A single page (`docs/index.html`) with two centered tabs:
 
 ```
 data/items.jsonl      one JSON object per line: source of truth + dedup index (schema below)
-data/timeline.json    verified historical milestones [{date, model, maker, change, change_zh, source_url, verification}]
+data/timeline.json    verified historical milestones [{date, model, maker, change, lang, glossary?, source_url, verification}]; `change` is written in the source's language
 data/state.json       {last_run_utc, ..., skipped_uids}; last_run_utc = since-time for the next run
 docs/index.html       GENERATED (News + Demos tabs)
 docs/data.json        GENERATED compact demo data for the wall/lightbox
