@@ -1,9 +1,9 @@
 {
- "last_run_utc": "2026-10-11T13:10:00Z",
- "last_run_label": "2026-10-11_PM (scheduled 21:03 run; window since 2026-10-11T01:20Z)",
- "x_calls_used": 17,
+ "last_run_utc": "2026-10-12T01:10:00Z",
+ "last_run_label": "2026-10-12_AM (scheduled 09:03 run; window since 2026-10-11T13:10Z)",
+ "x_calls_used": 37,
  "image_hash_rule": "sha256 of final .webp bytes (Pillow, max width 1600px, quality 85)",
- "notes": "2 demos (x-2108118600968282486, x-2106274477898367244) excluded at import as too suggestive; their uids are listed in skipped_uids so future runs don't re-add them. | 2026-10-10 PM2: x-2108814817763250576 (Qwen-Image-2.1-Turbo 'uncensored' post) skipped as suggestive. | 2026-10-11 AM: skipped as suggestive: x-2108921821676605792 (celebrity 'workout breathless'), x-2108973553114898630 (heart-cutout crop top/open-fly shorts), x-2108924882805514375 (real K-pop idols gym poses). | 2026-10-11 PM: skipped x-2109121020397539753 (real-person 'fan art' selfie, suggestive) and x-2109200815357305238 (NSFW).",
+ "notes": "2 demos (x-2108118600968282486, x-2106274477898367244) excluded at import as too suggestive; their uids are listed in skipped_uids so future runs don't re-add them. | 2026-10-10 PM2: x-2108814817763250576 (Qwen-Image-2.1-Turbo 'uncensored' post) skipped as suggestive. | 2026-10-11 AM: skipped as suggestive: x-2108921821676605792 (celebrity 'workout breathless'), x-2108973553114898630 (heart-cutout crop top/open-fly shorts), x-2108924882805514375 (real K-pop idols gym poses). | 2026-10-11 PM: skipped x-2109121020397539753 (real-person 'fan art' selfie, suggestive) and x-2109200815357305238 (NSFW). | 2026-10-12 AM: skipped as suggestive: x-2109283212807770526 (real celebrities 'workout breathless'), x-2109374513599414639 (bikini in hotel room), x-2109339160612073698 (petrification/asfr fetish), x-2109276526772617295 (bare-chested glowing-tattoo portrait).",
  "skipped_uids": [
   "x-2106274477898367244",
   "x-2108118600968282486",
@@ -12,6 +12,10 @@
   "x-2108973553114898630",
   "x-2108924882805514375",
   "x-2109121020397539753",
-  "x-2109200815357305238"
+  "x-2109200815357305238",
+  "x-2109283212807770526",
+  "x-2109374513599414639",
+  "x-2109339160612073698",
+  "x-2109276526772617295"
  ]
 }
