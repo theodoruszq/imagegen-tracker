@@ -301,5 +301,23 @@
   "source_url": "https://x.com/Alibaba_Qwen/status/2108549075218120949",
   "verification": "verified_this_run",
   "lang": "en"
+ },
+ {
+  "date": "2026-10-15",
+  "model": "FLUX 3 Image Klein",
+  "maker": "Black Forest Labs",
+  "change": "5.6B open-weights T2I/edit/multi-ref model (base + distilled, FP8/NVFP4/INT8), native 4K, bounding boxes; FLUX Kommunity License",
+  "source_url": "https://bfl.ai/blog/flux-3-image-klein",
+  "verification": "verified_this_run",
+  "lang": "en"
+ },
+ {
+  "date": "2026-10-15",
+  "model": "Krea 3 (Beta)",
+  "maker": "Krea",
+  "change": "Fast image-editing model: native 2K edits in under 8 s, $0.06/image at 2K; public beta on krea.ai + partner APIs",
+  "source_url": "https://www.krea.ai/blog/introducing-krea-3",
+  "verification": "verified_this_run",
+  "lang": "en"
  }
 ]
