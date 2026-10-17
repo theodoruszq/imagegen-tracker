@@ -319,5 +319,14 @@
   "source_url": "https://www.krea.ai/blog/introducing-krea-3",
   "verification": "verified_this_run",
   "lang": "en"
+ },
+ {
+  "date": "2026-10-16",
+  "model": "MOSS-Image (Base / SFT)",
+  "maker": "OpenMOSS",
+  "change": "5B open-weights DiT text-to-image (Base + SFT), Chinese & English text rendering, up to 4K-token prompts, JSON bounding-box layout control; Apache-2.0",
+  "source_url": "https://github.com/OpenMOSS/MOSS-Image",
+  "verification": "verified_this_run",
+  "lang": "en"
  }
 ]
