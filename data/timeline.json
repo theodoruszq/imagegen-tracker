@@ -328,5 +328,14 @@
   "source_url": "https://github.com/OpenMOSS/MOSS-Image",
   "verification": "verified_this_run",
   "lang": "en"
+ },
+ {
+  "date": "2026-10-20",
+  "model": "Fibo 2.0 (Dev / Edit Turbo)",
+  "maker": "Bria AI",
+  "change": "8B open-weights image model (text-to-image Dev + distilled Edit Turbo); #1 open-weights model on AA-Image-Editing v2.1; trained only on licensed data; Bria API, fal, Hugging Face",
+  "source_url": "https://x.com/bria_ai_/status/2112559473458045305",
+  "verification": "verified_this_run",
+  "lang": "en"
  }
 ]
