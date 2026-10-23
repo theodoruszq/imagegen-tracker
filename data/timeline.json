@@ -337,5 +337,23 @@
   "source_url": "https://x.com/bria_ai_/status/2112559473458045305",
   "verification": "verified_this_run",
   "lang": "en"
+ },
+ {
+  "date": "2026-10-22",
+  "model": "Ideogram Vector 1.0",
+  "maker": "Ideogram",
+  "change": "Ideogram's first vector model: text-to-SVG and image-to-vector with editable colors, shapes and smooth gradients; in Ideogram, API ($0.10–$0.32 per SVG) and partners (fal)",
+  "source_url": "https://x.com/ideogram_ai/status/2113300317584720259",
+  "verification": "verified_this_run",
+  "lang": "en"
+ },
+ {
+  "date": "2026-10-22",
+  "model": "Canva Craft",
+  "maker": "Canva",
+  "change": "Canva's first frontier image model (Canva Research), two-stage planner + renderer, up to 2K, 30+ aspect ratios, text in 55 languages; DesignArena #4 (Elo 1340); Dream Lab for all users + Public API (craft_v1_2k)",
+  "source_url": "https://x.com/canva/status/2113348707223753165",
+  "verification": "verified_this_run",
+  "lang": "en"
  }
 ]
