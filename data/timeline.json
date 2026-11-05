@@ -393,5 +393,24 @@
     "gloss": "adj. 开放权重的"
    }
   ]
+ },
+ {
+  "date": "2026-11-04",
+  "model": "ChatGPT Images 2.6 / GPT-Image-2.6 Flare & Sunburst",
+  "maker": "OpenAI",
+  "change": "ChatGPT Images 2.6 with native GIFs + reusable reference images; API models GPT-Image-2.6 Flare (~6s at low quality) and Sunburst (higher quality / edit consistency); ~50% faster; markup + SVG in API; all ChatGPT/Codex tiers globally",
+  "source_url": "https://x.com/OpenAI/status/2118124944928432327",
+  "verification": "verified_this_run",
+  "lang": "en",
+  "glossary": [
+   {
+    "term": "reference images",
+    "gloss": "n. 参考图"
+   },
+   {
+    "term": "markup",
+    "gloss": "n. 标注编辑"
+   }
+  ]
  }
 ]
