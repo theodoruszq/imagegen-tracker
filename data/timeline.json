@@ -412,5 +412,24 @@
     "gloss": "n. 标注编辑"
    }
   ]
+ },
+ {
+  "date": "2026-11-09",
+  "model": "Seedream 5.5",
+  "maker": "ByteDance",
+  "change": "Seedream 5.5: stable multi-turn editing across 100 rounds with pixel-level preservation of unedited regions; native RGBA transparent output; more realistic lighting/skin and better small text; API ¥0.28 per 2K edit (60% cheaper, ~40% faster than 5.0 Pro); Dreamina, CapCut, BytePlus, Jimeng, Volcano Ark",
+  "source_url": "https://x.com/ByteDanceSeed_/status/2119720475068920181",
+  "verification": "verified_this_run",
+  "lang": "en",
+  "glossary": [
+   {
+    "term": "pixel-level preservation",
+    "gloss": "phr. 像素级保留"
+   },
+   {
+    "term": "unedited regions",
+    "gloss": "n. 未编辑区域"
+   }
+  ]
  }
 ]
