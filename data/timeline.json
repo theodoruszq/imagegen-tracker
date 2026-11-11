@@ -431,5 +431,24 @@
     "gloss": "n. 未编辑区域"
    }
   ]
+ },
+ {
+  "date": "2026-11-10",
+  "model": "MiniMax H3-Image",
+  "maker": "MiniMax",
+  "change": "Open-weight 33.1B DiT for text-to-image + editing: native ~16 MP (4096×4096 up to 6272×2688) in ~10 s, 6 steps, up to 16 reference images; MiniMax API, MiniMax Code, Hailuo AI; Community License",
+  "source_url": "https://x.com/MiniMax_AI/status/2120179737695826420",
+  "verification": "verified_this_run",
+  "lang": "en",
+  "glossary": [
+   {
+    "term": "Open-weight",
+    "gloss": "adj. 开放权重的"
+   },
+   {
+    "term": "reference images",
+    "gloss": "n. 参考图"
+   }
+  ]
  }
 ]
